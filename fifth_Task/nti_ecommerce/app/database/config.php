@@ -13,8 +13,8 @@ class config
     {
         $this->con = new mysqli($this->hostname , $this->username, $this->password, $this->databasename);
 
-        // if ($con->connect_error) {
-        //     die("Connection failed: " . $mysqli->connect_error);
+        // if ($this->con->connect_error) {
+        //     die("Connection failed: " . $this->con->connect_error);
         //   }
         //   echo "Connected successfully";
     }
@@ -30,10 +30,11 @@ class config
         }
     }
 
-    public function runDQL(string $query) :array|object
+    public function runDQL(string $query)
     {
         $result = $this->con->query($query);
-        if($result->num_rows > 0){
+        // echo $result;die;
+        if($result){
             return $result;
         } else {
             return [];

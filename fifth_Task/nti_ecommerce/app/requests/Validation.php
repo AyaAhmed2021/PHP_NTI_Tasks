@@ -23,8 +23,15 @@ class Validation{
     }
 
     public function pattern($pattern){
-
-        return (preg_match($pattern, $this->value)? "":$this->name." is invalid");
+        if(preg_match($pattern, $this->value)){
+            $this->errors['Regex'.$this->name] = '';
+            return $this->errors['Regex'.$this->name];
+            
+        }
+        else {
+           $this->errors['Regex'.$this->name] = '<div class="alert alert-danger">'.$this->name . ' is Invalid'.'</div>';
+            return $this->errors['Regex'.$this->name];
+        }
     }
 
     public function unique($table){
@@ -32,7 +39,14 @@ class Validation{
         $config = new config;
         $result = $config -> runDQL($query);
 
-        return (empty($result)? "" : "this $this->name is already exist");
+        if(empty($result)){
+            $this->errors['Unique'.$this->name] = '';
+            return $this->errors['Unique'.$this->name];
+        }
+        else {
+            $this->errors['Unique'.$this->name] = '<div class="alert alert-danger">'.$this->name . ' is already exists'.'</div>';
+            return $this->errors['Unique'.$this->name];
+        }
     }
 
     public function confirmation($valueConfirmation){

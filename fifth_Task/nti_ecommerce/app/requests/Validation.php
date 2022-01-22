@@ -35,10 +35,11 @@ class Validation{
     }
 
     public function unique($table){
-        $query = "SELECT * FROM `$table` WHERE `$this->name` = `$this->value`";
+        $query = "SELECT * FROM `$table` WHERE `$this->name` = '$this->value'";
+    //    print_r($query) ;die;
         $config = new config;
         $result = $config -> runDQL($query);
-
+        // print_r($result) ;die;
         if(empty($result)){
             $this->errors['Unique'.$this->name] = '';
             return $this->errors['Unique'.$this->name];

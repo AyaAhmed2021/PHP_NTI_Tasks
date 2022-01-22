@@ -1,3 +1,17 @@
+<?php
+include_once "app/models/Category.php";
+include_once "app/models/Subcategory.php";
+// define('MYSQLI_ASSOC', 1);
+$category = new Category;
+$category->setStatus(1);
+$categoriesResult = $category->read();
+//  print_r($categoriesResult);die;
+
+$subcategory = new Subcategory;
+$subcategory->setStatus(1);
+
+?>
+
 <!-- header start -->
 <header class="header-area gray-bg clearfix">
     <div class="header-bottom">
@@ -21,7 +35,6 @@
                                             <li><a href="index-2.php">home version 2</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="about-us.php">about</a></li>
                                     <li class="mega-menu-position top-hover"><a href="shop.php">shop</a>
                                         <ul class="mega-menu">
                                             <li>
@@ -70,54 +83,75 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="top-hover"><a href="blog-left-sidebar.php">blog</a>
-                                        <ul class="submenu">
-                                            <li><a href="blog-masonry.php">Blog Masonry</a></li>
-                                            <li><a href="#">Blog Standard <span><i class="ion-ios-arrow-right"></i></span></a>
-                                                <ul class="lavel-menu">
-                                                    <li><a href="blog-left-sidebar.php">left sidebar</a></li>
-                                                    <li><a href="blog-right-sidebar.php">right sidebar</a></li>
-                                                    <li><a href="blog-no-sidebar.php">no sidebar</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Post Types <span><i class="ion-ios-arrow-right"></i></span> </a>
-                                                <ul class="lavel-menu">
-                                                    <li><a href="blog-details-standerd.php">Standard post</a></li>
-                                                    <li><a href="blog-details-audio.php">audio post</a></li>
-                                                    <li><a href="blog-details-video.php">video post</a></li>
-                                                    <li><a href="blog-details-gallery.php">gallery post</a></li>
-                                                    <li><a href="blog-details-link.php">link post</a></li>
-                                                    <li><a href="blog-details-quote.php">quote post</a></li>
-                                                </ul>
-                                            </li>
+
+                                    <li class="mega-menu-position top-hover"><a href="categories.php">Categories</a>
+                                        <ul class="mega-menu">
+                                            <?php
+                                            if ($categoriesResult) {
+
+                                                $categories = $categoriesResult->fetch_all(MYSQLI_ASSOC);
+                                                // print_r($categories);die;
+                                                foreach ($categories as $key => $cat) {
+                                            ?>
+                                                    <li>
+                                                        <ul>
+                                                            <li class="mega-menu-title"><?= $cat['name_en'] ?></li>
+                                                            <?php
+                                                            $subcategory->setCategory_id($cat['id']);
+                                                            $subResult = $subcategory->getSubsByCats();
+                                                            // var_dump($subResult);die;
+                                                            if ($subResult) {
+                                                                $subcategories = $subResult->fetch_all(MYSQLI_ASSOC);
+                                                                // print_r($subcategories);die;
+                                                                foreach($subcategories as $index => $subcat){?>
+                                                                    <li><a href="shop.php"><?= $subcat['name_en'] ?></a></li>
+                                                                <?php
+                                                                }
+                                                            }
+                                                            ?>
+                                                            
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                <?php }
+                                            }
+                                                ?>
                                         </ul>
                                     </li>
-                                    <li class="top-hover"><a href="#">pages</a>
-                                        <ul class="submenu">
-                                            <li><a href="about-us.php">about us </a></li>
-                                            <li><a href="shop.php">shop Grid</a></li>
-                                            <li><a href="shop-list.php">shop list</a></li>
-                                            <li><a href="product-details.php">product details</a></li>
-                                            <li><a href="cart-page.php">cart page</a></li>
-                                            <li><a href="checkout.php">checkout</a></li>
-                                            <li><a href="wishlist.php">wishlist</a></li>
-                                            <li><a href="my-account.php">my account</a></li>
-                                            <li><a href="login-register.php">login / register</a></li>
-                                            <li><a href="contact.php">contact</a></li>
-                                        </ul>
-                                    </li>
+
+
+
+
+
+
                                     <li><a href="contact.php">contact</a></li>
+                                    <li><a href="about-us.php">about</a></li>
+
                                 </ul>
                             </nav>
                         </div>
                         <div class="header-currency">
-                            <span class="digit">Welcome <i class="ti-angle-down"></i></span>
-                            <div class="dollar-submenu">
-                                <ul>
-                                    <li><a href="login.php">Login</a></li>
-                                    <li><a href="register.php">Register</a></li>
-                                </ul>
-                            </div>
+                            <?php
+                            if (isset($_SESSION['user'])) {
+                            ?>
+                                <span class="digit"><?= $_SESSION['user']->first_name . ' ' . $_SESSION['user']->last_name ?><i class="ti-angle-down"></i></span>
+                                <div class="dollar-submenu">
+                                    <ul>
+                                        <li><a href="profile.php">Profile</a></li>
+                                        <li><a href="app/post/logout.php">Logout</a></li>
+                                    </ul>
+                                </div>
+                            <?php
+                            } else {
+                            ?>
+                                <span class="digit">Welcome <i class="ti-angle-down"></i></span>
+                                <div class="dollar-submenu">
+                                    <ul>
+                                        <li><a href="login.php">Login</a></li>
+                                        <li><a href="register.php">Register</a></li>
+                                    </ul>
+                                </div>
+                            <?php } ?>
                         </div>
                         <div class="header-cart">
                             <a href="#">

@@ -38,7 +38,7 @@ class mail
 
             //Recipients
             $mail->setFrom('phpclassa22@gmail.com', 'Ecommerce_NTI');
-            $mail->addAddress($this->emailTo);     //Add a recipient
+            $mail->addAddress($this->mailTo);     //Add a recipient
 
             //Content
             $mail->isHTML(true);                                  //Set email format to HTML
@@ -46,9 +46,9 @@ class mail
             $mail->Body    = $this->body;
 
             $mail->send();
-            echo 'Message has been sent';
+            return true;
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            return false; 
         }
     }
 }

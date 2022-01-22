@@ -1,7 +1,9 @@
 
 <?php
-include "layouts/header.php";
-include "layouts/nav.php";
+$title = "NTI_Ecommerce";
+include_once "layouts/header.php";
+include_once "app/middleware/auth.php";
+include_once "layouts/nav.php";
 
 ?>
 <!-- Slider Start -->
@@ -738,8 +740,8 @@ include "layouts/nav.php";
 <!-- Newsletter Araea End -->
 
 <?php
-include "layouts/footer.php";
-include "layouts/footer-scripts.php";
+include_once "layouts/footer.php";
+include_once "layouts/footer-scripts.php";
 
 ?>
 

@@ -1,10 +1,23 @@
+<?php 
+  ob_start();
+  session_start();
+  if(isset($_COOKIE['remember_me'])){
+    include_once "app/models/User.php";
+    $userObj = new User;
+    $userObj->setEmail($_COOKIE['remember_me']);
+    $result = $userObj->getUserByEmail();
+    // print_r($result);die;
+    $user = $result->fetch_object();
+    $_SESSION['user']=$user;
+  }
+?>
 <!doctype html>
 <html class="no-js" lang="zxx">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>NTIEcommerce</title>
+    <title><?=$title?></title>
     <meta name="description" content="">
     <meta name="robots" content="noindex, follow" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,6 +37,7 @@
     <link rel="stylesheet" href="assets/css/meanmenu.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <?=isset($links)? $links:""?>
     <script src="assets/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 

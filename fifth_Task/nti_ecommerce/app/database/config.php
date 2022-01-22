@@ -34,7 +34,7 @@ class config
     {
         $result = $this->con->query($query);
         // echo $result;die;
-        if($result){
+        if($result->num_rows>0){
             return $result;
         } else {
             return [];
